@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
 
 class ProfileController extends Controller
 {
@@ -29,12 +33,32 @@ class ProfileController extends Controller
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+            // $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Update the user's profile photo.
+     */
+    public function updatePhoto(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        $image_path = $request->file('image_path');
+        if ($image_path) {
+            $image_path_name = time() . $image_path->getClientOriginalName();
+            Storage::disk('users')->put($image_path_name, File::get($image_path));
+
+            $user->image = $image_path_name;
+        }
+
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'photo-updated');
     }
 
     /**
@@ -57,4 +81,31 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function config(Request $request): View
+    {
+        return view('user.config', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function updateUser(ProfileUpdateRequest $request)
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            // $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return Redirect::route('user.config')->with('status', 'profile-updated');
+    }
+
+    public function getImage($filename)
+    {
+        $file = Storage::disk('users')->get($filename);
+        return new Response($file, 200);
+    }
+
 }
