@@ -4,5 +4,5 @@
             class="mt-2 max-w-xs">
     </div>
 @else
-    <p>HOLA</p>
+    <p>You don't have a Photo.</p>
 @endif

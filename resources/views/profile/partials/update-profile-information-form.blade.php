@@ -25,6 +25,7 @@
         </div>
 
         <div>
+
             <x-input-label for="surname" :value="__('Surname')" />
             <x-text-input id="surname" name="surname" type="text" class="mt-1 block w-full" :value="old('surname', $user->surname)"
                 required autofocus autocomplete="surname" />

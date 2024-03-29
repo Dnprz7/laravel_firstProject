@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/user', [ProfileController::class, 'config'])->name('user.config');
     Route::post('/user/updateUser', [ProfileController::class, 'updateUser'])->name('user.update');
+
+
+    Route::get('/upload_image', [ImageController::class, 'create'])->name('image.create');
+    Route::post('/image/save', [ImageController::class, 'save'])->name('image.save');
 });
 
 require __DIR__ . '/auth.php';
