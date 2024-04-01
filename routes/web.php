@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/image/{id}', [ImageController::class, 'detail'])->name('image.detail');
 
     Route::post('/comment/save', [CommentController::class, 'save'])->middleware(['verified'])->name('comment.save');
+    Route::get('/comment/delete/{id}', [CommentController::class, 'delete'])->middleware(['verified'])->name('comment.delete');
+
+    Route::get('/like/{id}', [LikeController::class, 'like'])->name('like.save');
+    Route::get('/dislike/{id}', [LikeController::class, 'dislike'])->name('like.delete');
 });
 
 require __DIR__ . '/auth.php';

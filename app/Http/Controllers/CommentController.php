@@ -32,4 +32,18 @@ class CommentController extends Controller
         return Redirect::route('image.detail', ['id' => $image_id])->with('status', 'comment-created');
 
     }
+
+    public function delete($id)
+    {
+        $user = Auth::user();
+
+        $comment = Comment::find($id);
+
+        if ($user && ($comment->user_id == $user->id || $comment->image->user_id == $user->id)) {
+            $comment->delete();
+            return Redirect::route('image.detail', ['id' => $comment->image->id])->with('status', 'comment-deleted');
+        } else {
+            return Redirect::route('image.detail', ['id' => $comment->image->id])->with('status', 'comment-not-deleted');
+        }
+    }
 }

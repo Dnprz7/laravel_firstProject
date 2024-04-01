@@ -17,6 +17,22 @@
                 </div>
             @endif
 
+            @if (session('status') === 'comment-deleted')
+                <div class="max-w-xl flex items-center">
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
+                        class="bg-green-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
+                        {{ __('Comment Deleted') }}
+                    </div>
+                </div>
+            @elseif (session('status') === 'comment-not-deleted')
+                <div class="max-w-xl flex items-center">
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
+                        class="bg-red-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
+                        {{ __('Comment Not Deleted') }}
+                    </div>
+                </div>
+            @endif
+
             <div class="sm:rounded-lg bg-white shadow ">
 
                 {{-- USER --}}
@@ -47,11 +63,47 @@
                         class="w-full" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)">
                 </div>
 
-                {{-- LIKES --}}
+                {{-- INTERACTON --}}
+                <div id="interaction" class="pl-2 pt-2 flex items-center">
+
+
+                    <div id="like">
+                        {{-- IF USER LIKE --}}
+                        <?php $user_like = false; ?>
+
+                        @foreach ($image->likes as $like)
+                            @if ($like->user->id == Auth::user()->id)
+                                <?php $user_like = true; ?>
+                            @endif
+                        @endforeach
+
+                        @if ($user_like)
+                            <img src="{{ asset('img/hearts-64(1).png') }}" data-id="{{ $image->id }}" alt="Likes"
+                                class="btn-like" style="width: 25px">
+                        @else
+                            <img src="{{ asset('img/favorite-3-64.png') }}" data-id="{{ $image->id }}"
+                                alt="Likes" class="btn-dislike" style="width: 25px">
+                        @endif
+                    </div>
+
+                    <div id="comment" class="pl-4">
+                        <a href="{{ route('image.detail', ['id' => $image->id]) }}">
+                            <img src="{{ asset('img/comments-64.png') }}" alt="Likes" class="img-fluid"
+                                style="width: 25px">
+                        </a>
+                    </div>
+
+                </div>
+
+                {{-- LIKES COUNT --}}
                 <div id="likes" class="pl-2 pt-2 ">
-                    <img src="{{ asset('img/favorite-3-64.png') }}" alt="Likes" class="img-fluid"
-                        style="width: 25px">
-                    {{-- <span>{{ count() }} Likes</span> --}}
+
+                    @if (count($image->likes) == 1)
+                        <span>{{ count($image->likes) }} Like</span>
+                    @else
+                        <span>{{ count($image->likes) }} Likes</span>
+                    @endif
+
                 </div>
 
                 {{-- DESCRIPTION --}}
@@ -71,6 +123,13 @@
                             <span class="pl-1">{{ $comment->content }}</span>
                             <div class="pl-3 text-sm text-gray-600">
                                 {{ $image->created_at->diffForHumans(null, false, false, 1) }}</div>
+                            @if (Auth::check() && ($comment->user_id == Auth::user()->id || $comment->image->user_id == Auth::user()->id))
+                                <a href="{{ route('comment.delete', ['id' => $comment->id]) }}" class="pl-3">
+                                    <img src="{{ asset('img/trash-9-64(1).png') }}" alt="Likes" class="img-fluid"
+                                        style="width: 25px">
+                                </a>
+                            @endif
+
                         </div>
                     @endforeach
                 </div>
@@ -109,5 +168,12 @@
         </div>
     </div>
 
+    <script>
+        // Obtener el elemento textarea por su ID
+        const textarea = document.getElementById('myTextarea');
+
+        // Colocar el foco en el textarea al cargar la página
+        textarea.focus();
+    </script>
 
 </x-app-layout>

@@ -50,23 +50,45 @@
 
                     {{-- INTERACTON --}}
                     <div id="interaction" class="pl-2 pt-2 flex items-center">
+
+
                         <div id="like">
-                            <img src="{{ asset('img/favorite-3-64.png') }}" alt="Likes" class="img-fluid"
-                                style="width: 25px">
+                            {{-- IF USER LIKE --}}
+                            <?php $user_like = false; ?>
+
+                            @foreach ($image->likes as $like)
+                                @if ($like->user->id == Auth::user()->id)
+                                    <?php $user_like = true; ?>
+                                @endif
+                            @endforeach
+
+                            @if ($user_like)
+                                <img src="{{ asset('img/hearts-64(1).png') }}" data-id="{{ $image->id }}"
+                                    alt="Likes" class="btn-like" style="width: 25px">
+                            @else
+                                <img src="{{ asset('img/favorite-3-64.png') }}" data-id="{{ $image->id }}"
+                                    alt="Likes" class="btn-dislike" style="width: 25px">
+                            @endif
                         </div>
+
                         <div id="comment" class="pl-4">
                             <a href="{{ route('image.detail', ['id' => $image->id]) }}">
                                 <img src="{{ asset('img/comments-64.png') }}" alt="Likes" class="img-fluid"
                                     style="width: 25px">
                             </a>
                         </div>
+
                     </div>
 
-                    {{-- LIKES --}}
+                    {{-- LIKES COUNT --}}
                     <div id="likes" class="pl-2 pt-2 ">
-                        ()
-                        Likes
-                        {{-- <span>{{ count() }} Likes</span> --}}
+
+                        @if (count($image->likes) == 1)
+                            <span>{{ count($image->likes) }} Like</span>
+                        @else
+                            <span>{{ count($image->likes) }} Likes</span>
+                        @endif
+
                     </div>
 
                     {{-- DESCRIPTION --}}
@@ -79,9 +101,11 @@
                         <span class="pb-1">
                             <a href="{{ route('image.detail', ['id' => $image->id]) }}">
                                 @if (count($image->comments) == 0)
-                                    Be the first comment
+                                    <span>Be the first comment</span>
+                                @elseif (count($image->comments) == 1)
+                                    <span> View {{ count($image->comments) }} comment</span>
                                 @else
-                                    View all {{ count($image->comments) }} comments
+                                    <span> View all {{ count($image->comments) }} comments</span>
                                 @endif
                             </a>
                         </span>
@@ -106,5 +130,7 @@
             </div>
         </div>
     </div>
+
+
 
 </x-app-layout>

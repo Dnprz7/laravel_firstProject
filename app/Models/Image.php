@@ -14,7 +14,7 @@ class Image extends Model
     //RELACION UNO A MUCHOS
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->orderBy('id', 'desc');
         // return $this->hasMany('App\Comment');
     }
 
