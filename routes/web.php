@@ -40,6 +40,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/like/{id}', [LikeController::class, 'like'])->name('like.save');
     Route::get('/dislike/{id}', [LikeController::class, 'dislike'])->name('like.delete');
+
+    Route::get('/likes', [LikeController::class, 'index'])->name('likes.index');
+
+    Route::get('/profile/{id}', [ProfileController::class, 'profile'])->name('profile');
 });
 
 require __DIR__ . '/auth.php';

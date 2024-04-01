@@ -1,54 +1,61 @@
 var url = 'http://127.0.0.1:8000';
 window.addEventListener("load", function(){
 
-    $('.btn-like').css('cursor','pointer');
-    $('.btn-dislike').css('cursor','pointer');
+	$('.btn-like').css('cursor', 'pointer');
+	$('.btn-dislike').css('cursor', 'pointer');
 
-    function like(){
-        $('.btn-like').unbind('click').click(function(){
-            console.log('like');
-            $(this).addClass('btn-dislike').removeClass('btn-like');
-            $(this).attr('src', url+'/img/hearts-64(1).png');
+	// Botón de like
+	function like(){
+		$('.btn-like').unbind('click').click(function(){
+			console.log('like');
+			$(this).addClass('btn-dislike').removeClass('btn-like');
+			$(this).attr('src', url+'/img/hearts-64(1).png');
 
-            $.ajax({
-                url: url+'/like/'+$(this).data('id'),
+			$.ajax({
+				url: url+'/like/'+$(this).data('id'),
 				type: 'GET',
 				success: function(response){
 					if(response.like){
-						console.log('You like the post');
+                        location.reload();
+						console.log('Has dado like a la publicacion');
 					}else{
-						console.log('Error on like');
+						console.log('Error al dar like');
 					}
 				}
-            });
+			});
+			dislike();
+		});
+	}
+	like();
 
-            dislike();
-        });
-    }
-    like();
+	// Botón de dislike
+	function dislike(){
+		$('.btn-dislike').unbind('click').click(function(){
+			console.log('dislike');
+			$(this).addClass('btn-like').removeClass('btn-dislike');
+			$(this).attr('src', url+'/img/favorite-3-64.png');
 
-
-    function dislike(){
-        $('.btn-dislike').unbind('click').click(function(){
-            console.log('dislike');
-            $(this).addClass('btn-like').removeClass('btn-dislike');
-            $(this).attr('src', url+'/img/favorite-3-64.png');
-
-            $.ajax({
+			$.ajax({
 				url: url+'/dislike/'+$(this).data('id'),
 				type: 'GET',
 				success: function(response){
 					if(response.like){
-						console.log('You dislike the post');
+                        location.reload();
+						console.log('Has dado dislike a la publicacion');
 					}else{
-						console.log('Error on dislike');
+						console.log('Error al dar dislike');
 					}
 				}
 			});
 
-            like();
-        });
-    }
-    dislike();
+			like();
+		});
+	}
+	dislike();
+
+	// BUSCADOR
+	$('#buscador').submit(function(e){
+		$(this).attr('action',url+'/gente/'+$('#buscador #search').val());
+	});
 
 });

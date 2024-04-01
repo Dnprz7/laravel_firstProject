@@ -38,7 +38,7 @@
                 {{-- USER --}}
                 <div id="user" class="pl-2 py-2 max-auto flex items-center bg-gray-200 ">
 
-                    <a href="{{ route('image.detail', ['id' => $image->id]) }}" class="flex items-center">
+                    <a href="{{ route('profile', ['id' => $image->user->id]) }}" class="flex items-center">
 
                         @if ($image->user->image)
                             <div class="mr-1">

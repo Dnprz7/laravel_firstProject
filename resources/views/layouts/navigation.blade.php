@@ -18,11 +18,22 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('profile', ['id' => Auth::user()->id])" :active="request()->routeIs('profile')">
+                        {{ __('Profiles') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('image.create')" :active="request()->routeIs('image.create')">
                         {{ __('Upload a Photo') }}
                     </x-nav-link>
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('likes.index')" :active="request()->routeIs('likes.index')">
+                        {{ __('Favorites') }}
+                    </x-nav-link>
+                </div>
 
             </div>
 
@@ -53,12 +64,12 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <x-dropdown-link :href="route('user.config')">
                             {{ __('Configurations') }}
                         </x-dropdown-link>
+
+                        {{-- <x-dropdown-link :href="route('user.config')">
+                            {{ __('Configurations') }}
+                        </x-dropdown-link> --}}
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

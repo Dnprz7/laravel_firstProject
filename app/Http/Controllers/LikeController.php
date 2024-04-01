@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Redirect;
 
 class LikeController extends Controller
 {
+
+    public function index()
+    {
+        $user = Auth::user();
+        $likes = Like::where('user_id',$user->id)->orderBy('id', 'desc')->paginate(5);
+
+        return view('likes.index', [
+            'likes' => $likes
+        ]);
+    }
+
     public function like($image_id)
     {
         $user = Auth::user();
@@ -55,4 +66,6 @@ class LikeController extends Controller
             ]);
         }
     }
+
+
 }
