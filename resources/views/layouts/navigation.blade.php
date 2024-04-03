@@ -30,6 +30,12 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            @if (Auth::user()->image)
+                                <div class="ms-1">
+                                    <img src="{{ route('profile.avatar', ['filename' => Auth::user()->image]) }}"
+                                        alt="Current Photo" class="h-6 w-6 rounded-full">
+                                </div>
+                            @endif
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -39,12 +45,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            @if (Auth::user()->image)
-                                <div class="ms-1">
-                                    <img src="{{ route('profile.avatar', ['filename' => Auth::user()->image]) }}"
-                                        alt="Current Photo" class="h-6 w-6 rounded-full">
-                                </div>
-                            @endif
+
                         </button>
                     </x-slot>
 
