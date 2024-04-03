@@ -17,6 +17,22 @@
                 </div>
             @endif
 
+            @if (session('status') === 'image-deleted')
+                <div class="max-w-xl flex items-center">
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
+                        class="bg-green-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
+                        {{ __('Image Deleted') }}
+                    </div>
+                </div>
+            @elseif (session('status') === 'image-not-deleted')
+                <div class="max-w-xl flex items-center">
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
+                        class="bg-red-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
+                        {{ __('Image not Deleted') }}
+                    </div>
+                </div>
+            @endif
+
             @foreach ($images as $image)
                 @include('includes.image', ['image' => $image])
             @endforeach

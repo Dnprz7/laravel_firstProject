@@ -23,16 +23,16 @@
     </div>
 
     {{-- IMAGE --}}
-    <div id="image" class="">
+    <div class="">
         <img src="{{ route('image.file', ['filename' => $image->image_path]) }}" alt="Post" class="w-full"
             style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)">
     </div>
 
     {{-- INTERACTON --}}
-    <div id="interaction" class="pl-2 pt-2 flex items-center">
+    <div class="pl-2 pt-2 flex items-center">
 
 
-        <div id="like">
+        <div>
             {{-- IF USER LIKE --}}
             <?php $user_like = false; ?>
 
@@ -51,7 +51,7 @@
             @endif
         </div>
 
-        <div id="comment" class="pl-4">
+        <div class="pl-4">
             <a href="{{ route('image.detail', ['id' => $image->id]) }}">
                 <img src="{{ asset('img/comments-64.png') }}" alt="Likes" class="img-fluid" style="width: 25px">
             </a>
@@ -60,23 +60,23 @@
     </div>
 
     {{-- LIKES COUNT --}}
-    <div id="likes" class="pl-2 pt-2 ">
+    <div class="pl-2 pt-2 ">
 
         @if (count($image->likes) == 1)
-            <span>{{ count($image->likes) }} Like</span>
+            <span id="image_like_{{ $image->id }}">{{ count($image->likes) }} Like</span>
         @else
-            <span>{{ count($image->likes) }} Likes</span>
+            <span id="image_like_{{ $image->id }}">{{ count($image->likes) }} Likes</span>
         @endif
 
     </div>
 
     {{-- DESCRIPTION --}}
-    <div id="description" class="pl-2 pt-2">
+    <div class="pl-2 pt-2">
         <strong>{{ __('@' . $image->user->nick) }} </strong> {{ $image->description }}
     </div>
 
     {{-- COMMENT --}}
-    <div id="comments" class="pl-2 py-2">
+    <div class="pl-2 py-2">
         <span class="pb-1">
             <a href="{{ route('image.detail', ['id' => $image->id]) }}">
                 @if (count($image->comments) == 0)
@@ -92,7 +92,7 @@
     </div>
 
     {{-- DATE --}}
-    <div id="date" class="pl-2 pb-2  text-sm text-gray-600">
+    <div class="pl-2 pb-2  text-sm text-gray-600">
         <span>
             {{-- DOCUMENTATION https://carbon.nesbot.com/docs/#api-humandiff --}}
             Posted {{ $image->created_at->diffForHumans(null, false, false, 1) }}

@@ -16,6 +16,24 @@ use App\FormatTime;
 
 class ProfileController extends Controller
 {
+
+    public function index($search = null)
+    {
+        if (!empty($search)) {
+            $users = User::where('nick', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('surname', 'LIKE', '%' . $search . '%')
+                ->orderBy('id', 'desc')
+                ->paginate(5);
+        } else {
+            $users = User::orderBy('id', 'desc')->paginate(5);
+        }
+
+        return view('user.index', [
+            'users' => $users
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -118,4 +136,5 @@ class ProfileController extends Controller
             'user' => $user
         ]);
     }
+
 }

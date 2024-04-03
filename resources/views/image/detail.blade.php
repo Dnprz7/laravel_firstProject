@@ -15,9 +15,7 @@
                         {{ __('Comment Send') }}
                     </div>
                 </div>
-            @endif
-
-            @if (session('status') === 'comment-deleted')
+            @elseif (session('status') === 'comment-deleted')
                 <div class="max-w-xl flex items-center">
                     <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
                         class="bg-green-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
@@ -29,6 +27,13 @@
                     <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
                         class="bg-red-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
                         {{ __('Comment Not Deleted') }}
+                    </div>
+                </div>
+            @elseif (session('status') === 'post-updated')
+                <div class="max-w-xl flex items-center">
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)"
+                        class="bg-green-500 text-white font-semibold py-1 px-2 rounded-lg shadow-md">
+                        {{ __('Post Updated') }}
                     </div>
                 </div>
             @endif
@@ -63,6 +68,41 @@
                         class="w-full" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)">
                 </div>
 
+                {{-- BUTTON EDIT AND DELETE --}}
+                @if (Auth::user() && Auth::user()->id == $image->user->id)
+                    <div class="pl-2 pt-2 actions">
+                        {{-- Edit button --}}
+                        <a
+                            href="{{ route('image.edit', ['id' => $image->id]) }}"><x-aux-button>{{ __('Edit') }}</x-aux-button></a>
+                        {{-- Delete button --}}
+                        <x-danger-button x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'confirm-image-deletion')">{{ __('Delete') }}</x-danger-button>
+
+                        <x-modal name="confirm-image-deletion" focusable>
+                            <form method="post" action="{{ route('image.delete', ['id' => $image->id]) }}"
+                                class="p-6">
+                                @csrf
+                                @method('delete')
+
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    {{ __('Are you sure you want to delete your post?') }}
+                                </h2>
+
+                                <div class="mt-6 flex justify-end">
+                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                        {{ __('Cancel') }}
+                                    </x-secondary-button>
+
+                                    <x-danger-button class="ms-3">
+                                        {{ __('Delete Post') }}
+                                    </x-danger-button>
+                                </div>
+                            </form>
+                        </x-modal>
+
+                    </div>
+                @endif
+
                 {{-- INTERACTON --}}
                 <div id="interaction" class="pl-2 pt-2 flex items-center">
 
@@ -78,8 +118,8 @@
                         @endforeach
 
                         @if ($user_like)
-                            <img src="{{ asset('img/hearts-64(1).png') }}" data-id="{{ $image->id }}" alt="Likes"
-                                class="btn-like" style="width: 25px">
+                            <img src="{{ asset('img/hearts-64(1).png') }}" data-id="{{ $image->id }}"
+                                alt="Likes" class="btn-like" style="width: 25px">
                         @else
                             <img src="{{ asset('img/favorite-3-64.png') }}" data-id="{{ $image->id }}"
                                 alt="Likes" class="btn-dislike" style="width: 25px">
@@ -122,7 +162,7 @@
                             <strong>{{ __('@' . $comment->user->nick) }}</strong>
                             <span class="pl-1">{{ $comment->content }}</span>
                             <div class="pl-3 text-sm text-gray-600">
-                                {{ $image->created_at->diffForHumans(null, false, false, 1) }}</div>
+                                {{ $comment->created_at->diffForHumans(null, false, false, 1) }}</div>
                             @if (Auth::check() && ($comment->user_id == Auth::user()->id || $comment->image->user_id == Auth::user()->id))
                                 <a href="{{ route('comment.delete', ['id' => $comment->id]) }}" class="pl-3">
                                     <img src="{{ asset('img/trash-9-64(1).png') }}" alt="Likes" class="img-fluid"

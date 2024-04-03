@@ -12,22 +12,39 @@
                     <section>
                         <header>
                             <h2 class="text-lg font-medium text-gray-900">
-                                {{ __('Include a Photo') }}
+                                {{ __('Edit Photo') }}
                             </h2>
                             <p class="mt-1 text-sm text-gray-600">
-                                {{ __('Add a new Photo with a comment to post') }}
+                                {{ __('Edit your Photo and your comment') }}
                             </p>
                         </header>
 
-                        <form method="post" action="{{ route('image.save') }}" class="mt-6 space-y-6"
+                        <form method="post" action="{{ route('image.update') }}" class="mt-6 space-y-6"
                             enctype="multipart/form-data">
                             @csrf
 
+                            <input type="hidden" name="image_id" value="{{ $image->id }}">
+
                             <div class="flex flex-col">
-                                <label for="image_path" class="text-sm text-gray-700">Imagen</label>
-                                <input type="file" name="image_path" id="image_path"
-                                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                    required>
+                                <div x-show="currentImagePreview">
+                                    <img src="{{ route('image.file', ['filename' => $image->image_path]) }}"
+                                        alt="Post" class="mt-2 max-w-xs"
+                                        style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)">
+                                </div>
+
+                                <div class="pt-4" x-data="{ imagePreview: '' }">
+                                    <label for="image_path" class="block font-medium text-sm text-gray-700">Select
+                                        Photo</label>
+                                    <input id="image_path" name="image_path" type="file" class="mt-1 block w-full"
+                                        x-on:change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                                        accept="image/*">
+                                    <div x-show="imagePreview">
+                                        <h3 class="text-lg font-small text-gray-900 ">
+                                            {{ __('New Photo') }}
+                                        </h3>
+                                        <img :src="imagePreview" alt="Preview" class="mt-2 max-w-xs">
+                                    </div>
+                                </div>
 
                                 @if ($errors->has('image_path'))
                                     <span class="invalid-feedback" role"alert">
@@ -40,8 +57,7 @@
 
                                 <label for="description" class="text-sm text-gray-700">Description</label>
                                 <textarea name="description" id="description"
-                                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                    required> </textarea>
+                                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ $image->description }}</textarea>
 
                                 @if ($errors->has('description'))
                                     <span class="invalid-feedback" role"alert">
@@ -51,7 +67,7 @@
                             </div>
 
                             <div class="flex items-center gap-4">
-                                <x-primary-button>{{ __('Save') }}</x-primary-button>
+                                <x-primary-button>{{ __('Update') }}</x-primary-button>
                             </div>
 
                         </form>

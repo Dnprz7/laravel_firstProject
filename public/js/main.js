@@ -6,7 +6,7 @@ window.addEventListener("load", function(){
 
 	// Botón de like
 	function like(){
-		$('.btn-like').unbind('click').click(function(){
+		$('.btn-dislike').unbind('click').click(function(){
 			console.log('like');
 			$(this).addClass('btn-dislike').removeClass('btn-like');
 			$(this).attr('src', url+'/img/hearts-64(1).png');
@@ -30,7 +30,7 @@ window.addEventListener("load", function(){
 
 	// Botón de dislike
 	function dislike(){
-		$('.btn-dislike').unbind('click').click(function(){
+		$('.btn-like').unbind('click').click(function(){
 			console.log('dislike');
 			$(this).addClass('btn-like').removeClass('btn-dislike');
 			$(this).attr('src', url+'/img/favorite-3-64.png');
@@ -54,8 +54,11 @@ window.addEventListener("load", function(){
 	dislike();
 
 	// BUSCADOR
-	$('#buscador').submit(function(e){
-		$(this).attr('action',url+'/gente/'+$('#buscador #search').val());
+	$('#searcher').submit(function(e){
+        e.preventDefault()
+        const newUrl = url + '/people/'+$('#searcher #search').val();
+        console.log(newUrl)
+        window.location.href = newUrl;
 	});
 
 });
