@@ -14,7 +14,7 @@
     </form>
 
     {{-- AVATAR --}}
-    <h3 class="text-lg font-small text-gray-900 text-sm">
+    <h3 class="text-lg font-small text-gray-900 ">
         {{ __('Current Photo') }}
     </h3>
     @include('includes.avatar')
@@ -28,7 +28,7 @@
             <input id="image_path" name="image_path" type="file" class="mt-1 block w-full"
                 x-on:change="imagePreview = URL.createObjectURL($event.target.files[0])" accept="image/*">
             <div x-show="imagePreview">
-                <h3 class="text-lg font-small text-gray-900 text-sm">
+                <h3 class="text-lg font-small text-gray-900 ">
                     {{ __('New Photo') }}
                 </h3>
                 <img :src="imagePreview" alt="Preview" class="mt-2 max-w-xs">
@@ -38,7 +38,7 @@
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
-            @if (session('status') === 'profile-updated')
+            @if (session('status') === 'photo-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-gray-600">{{ __('Saved.') }}</p>
             @endif

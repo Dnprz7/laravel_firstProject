@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
+use App\FormatTime;
 
 class ProfileController extends Controller
 {
@@ -33,7 +34,7 @@ class ProfileController extends Controller
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
-            // $request->user()->email_verified_at = null;
+            $request->user()->remember_token = null;
         }
 
         $request->user()->save();
@@ -94,7 +95,7 @@ class ProfileController extends Controller
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
-            // $request->user()->email_verified_at = null;
+            $request->user()->remember_token = null;
         }
 
         $request->user()->save();
@@ -108,4 +109,13 @@ class ProfileController extends Controller
         return new Response($file, 200);
     }
 
+
+    public function profile($id)
+    {
+        $user = User::find($id);
+
+        return view('user.profile', [
+            'user' => $user
+        ]);
+    }
 }

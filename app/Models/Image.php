@@ -14,7 +14,7 @@ class Image extends Model
     //RELACION UNO A MUCHOS
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->orderBy('id', 'desc');
         // return $this->hasMany('App\Comment');
     }
 
@@ -28,7 +28,7 @@ class Image extends Model
     //RELACION MUCHOS A UNO
     public function user()
     {
-        return $this->belongsTo(Like::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
         // return $this->belongsTo('App\User, 'user_id');
     }
 
